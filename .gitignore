@@ -1,0 +1,7 @@
+nbproject/
+fed/settings-local.py
+*.pyc
+*.html~
+*.py~
+*.js~
+*.css~

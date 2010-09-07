@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+        <script type="text/javascript" src="/files/js/jquery.autocomplete.min.js"></script>
+        <link type="text/css" rel="stylesheet"  href="/files/css/site.css" >
+        <style type="text/css">
+            body{
+                background: none;
+            }
+        </style>
+        <script>
+            $(document).ready(function(){
+                $('.agregar').click(function(){
+                    var id = $(this).attr('id');
+                    var nombre = $('#'+id+'_nombre').html();
+                    $('#id_persona', window.parent.document).val(nombre);
+                    $('#id_userid', window.parent.document).val(id);
+                    window.parent.$.modal.close(true);
+                    return false;
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div style="margin-left: 35px; margin-bottom: 20px;">
+            <form action="." method="GET">
+                <table>
+                    <tr>
+                        <th>
+                            <label for="id_persona">Solicitante:</label>
+                        </th>
+                        <td>
+                            <input id="q" type="text" name="q" maxlength="200" />
+                            <input type="submit" value="Buscar" />
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <center>
+            <div>
+                <table class="mostrar">
+                    <thead>
+                        <tr>
+                            <th>Nombre y Apellido</th>
+                            <th>Email</th>
+                            <th>Tel&eacute;fono</th>
+                            <th>ORG</th>
+                            <th>Profesi&oacute;n</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody style="overflow: auto; height: 280px; overflow-x: hidden;">
+                        {% for persona in personas %}
+                        <tr>
+                            <td id="{{persona.id}}_nombre">{{persona.nombre}} {{persona.apellido}}</td>
+                            <td>{{persona.email}}</td>
+                            <td>{{persona.telefono}}</td>
+                            <td>{{persona.organizacion}}</td>
+                            <td>
+                                {% for pro in persona.profesion.all %}
+                                {{pro.nombre}}{% if forloop.last %}{% else %},<br>{% endif %}
+                                {% endfor %}
+                            </td>
+                            <td style="padding:0; padding-right: 20px; padding-left: 10px;">
+                                <a href="" class="agregar" id="{{persona.id}}">
+                                    Agregar
+                                    <img src="/files/images/check.png" alt="Agregar">
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </center>        
+    </body>
+</html>

@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load pagination_tags %}
+{% block extrahead %}
+<style type="text/css">
+    .selected{
+        background: url(/files/images/row2.png) no-repeat right;
+    }
+</style>
+<script type="text/javascript" src="/files/js/site.js"></script>
+{% endblock %}
+
+{% block leftmenu %}
+{% include "left_add.html" %}
+{% endblock %}
+
+{% block data %}
+<div style="margin-left: 20px;">
+    <img style="float: right; margin-right: 40px;" src="/files/images/materiales.png" alt="Materiales"> 
+    <span style="color: #069;">Materiales</span><br><br>
+    <form style="margin:0;" action="." method="POST">{% csrf_token %}
+        <table>
+            {{form.as_table}}
+            <tr><td><input type="submit" value="Guardar" /></td></tr>
+        </table>
+    </form>
+    <br><br>
+    <div id="registrados">
+        <table class="mostrar">
+            <caption>Materiales</caption>
+            <thead>
+                <tr>
+                    <th>C&oacute;digo</th>
+                    <th>T&iacute;tulo</th>
+                    <th>Autor</th>
+                    <th>Tipo</th>
+                    <th>Tem&aacute;tica</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% autopaginate materiales 20 %}
+                {% for material in materiales %}
+                <tr>
+                    <td>{{material.codigo|upper}}</td>
+                    <td>{{material.titulo}}</td>
+                    <td>{{material.autor}}</td>
+                    <td>{{material.tipo}}</td>
+                    <td>
+                        {% for tema in material.tematica.all %}
+                        {{tema.nombre}}{% if forloop.last %}{% else %},<br>{% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        <a href="/edit/material/{{material.id}}/" style="color: #069;"><img src="/files/images/editar2.png">Editar</a> | <a href="javascript:Borrar_material('{{material.id}}');" style="color: #069;"><img src="/files/images/borrar.png" alt="borrar">Borrar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div style="font-size: 12px;">{% paginate %}</div>
+    </div>
+</div>
+{% endblock %}

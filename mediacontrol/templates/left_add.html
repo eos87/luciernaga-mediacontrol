@@ -1,0 +1,9 @@
+<ul>
+    <li class="title">Agregar</li>
+    <li><a {% ifequal flag 'solicitud' %}class="selected" style="color: #6c6c6c;"{% endifequal %} href="/add/solicitud/">Solicitud</a></li>
+    <li><a {% ifequal flag 'persona' %}class="selected" style="color: #6c6c6c;"{% endifequal %} href="/add/persona/">Persona</a></li>
+    <li><a {% ifequal flag 'material' %}class="selected" style="color: #6c6c6c;"{% endifequal %} href="/add/material/">Material</a>
+    <li><a {% ifequal flag 'otros' %}class="selected" style="color: #6c6c6c;"{% endifequal %} href="/add/otros/">Otros</a>
+    <li class="footer"></li>
+</ul>
+
