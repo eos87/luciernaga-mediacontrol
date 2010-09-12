@@ -9,6 +9,7 @@
 <link type="text/css" rel="stylesheet" href="/files/css/style.css">
 <link type="text/css" rel="stylesheet" href="/files/css/simple-modal.css">
 <script type="text/javascript" src="/files/js/jquery.simplemodal.min.js"></script>
+<script type="text/javascript" src="/files/js/jquery.cookie.js"></script>
 <script type="text/javascript" src="/files/js/site.js"></script>
 {% endblock %}
 
@@ -20,7 +21,7 @@
 <div style="margin-left: 20px;">
     <img style="float: right; margin-right: 40px;" src="/files/images/solicitud.png" alt="Solicitud">
     <span style="color: #069;">Solicitudes</span><br><br>
-    <form action="." method="POST">
+    <form action="." method="POST">{% csrf_token %}
         <table>
             {{form.as_table}}            
         </table>
@@ -29,7 +30,7 @@
             <caption>Materiales solicitados</caption>
             <thead>
                 <tr>
-                    <th>Llevar</th>
+                    <th>Borrar</th>
                     <th>C&oacute;digo</th>
                     <th>T&iacute;tulo</th>
                     <th>Autor</th>
@@ -38,9 +39,10 @@
             </thead>
             <tbody>                
             </tbody>
-            <input type="submit" value="Guardar" /><br><br>
+            <input type="submit" id="submit" value="Guardar" /><br><br>
         </table>
     </form>
+    {{a}}
 </div
 
 

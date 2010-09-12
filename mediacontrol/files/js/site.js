@@ -1,4 +1,5 @@
 $(document).ready(function(){
+    $.cookie('url', '?q=');
     $('#view_pro').click(function(){
         getProfesion();
         return false;
@@ -18,12 +19,64 @@ $(document).ready(function(){
         openWindow('load');
     });
     $('#id_material').autocomplete('/ajax/personas/').result(function(evt, data, formatted){
-        lista = '<tr><td><input type="checkbox" value="1" name="'+data[5]+'" id="id_'+data[1]+'"></td>';
-        lista += '<td>'+data[1]+'</td><td>'+data[2]+'</td><td>'+data[3]+'</td><td>'+data[4]+'</td></td>'
-        $('.mostrar tbody').append(lista);
-        $('#id_material').val('');
-    });    
+        var url = $.cookie('url');
+        var id = data[5];
+        var s = url.search(id+':');       
+        if (s!=-1){
+            var sub = url.substring(s,s+3);            
+            var cant = sub.split(':')[1];
+            var cant2 = parseInt(cant) + 1;            
+            url = url.replace(id+':'+cant, id+':'+cant2);
+            $.cookie('url', url);
+        }else{
+            if (url == '?q='){
+                url += ''+id+':1';
+                $.cookie('url', url);
+            }else{
+                url += ','+id+':1';
+                $.cookie('url', url);
+            }
+        }        
+        var lista = '<tr><td><a href="" onclick="$(this).parent().parent().remove(); Remove('+data[5]+'); return false;"><img src="/files/images/borrar.png" alt="borrar">Borrar</a></td>';
+        lista += '<td>'+data[1]+'</td><td>'+data[2]+'</td><td>'+data[3]+'</td><td>'+data[4]+'</td></td>';
+        $('.mostrar tbody').append(lista);        
+        $('#id_material').val('');        
+    });
+    $('#submit').click(function(){
+        var url = $.cookie('url');
+        var user = $('#id_userid').val();
+        var fecha = $('#id_fecha').val();
+        if ((user=='') || (fecha=='')){
+            alert('El campo y fecha son obligatorios.');
+        }else{
+            url += '&user='+user+'&date='+fecha;
+        }
+        alert(url);
+        return false;
+    });
 });
+
+function Remove(id){
+    var url = $.cookie('url');
+    var s = url.search(id+':');
+    var sub = url.substring(s,s+3);
+    var cant = sub.split(':')[1];
+    if (parseInt(cant) > 1){
+        var cant2 = parseInt(cant) - 1;
+        url = url.replace(id+':'+cant, id+':'+cant2);
+    }else{
+        if ((url.search(id+':'+cant+','))!=-1){
+            url = url.replace(id+':'+cant+',', '');
+        }
+        else if((url.search(','+id+':'+cant))!=-1){
+            url = url.replace(','+id+':'+cant, '');
+        }
+        else{
+            url = url.replace(id+':'+cant, '');
+        }
+    }
+    $.cookie('url', url);
+}
 
 function getDateTime(){
     var date = new Date();

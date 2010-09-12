@@ -13,10 +13,8 @@ def index(request):
 
 def add_solicitud(request):
     flag = 'solicitud'
-    if request.method == 'POST':
-        form = SolicitudForm(request.POST)
-    else:
-        form = SolicitudForm()
+    a = request.GET.get('q', '')
+    form = SolicitudForm()
     return render_to_response('solicitud.html', RequestContext(request, locals()))
 
 def add_persona(request):

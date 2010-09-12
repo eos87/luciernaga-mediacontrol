@@ -51,6 +51,7 @@ class Material(models.Model):
     autor = models.CharField(max_length=100, null=True, blank=True)
     tematica = models.ManyToManyField(Tematica)
     tipo = models.ForeignKey(Tipo)
+    cantidad = models.IntegerField()
 
     def __unicode__(self):
         return self.codigo + '-' + self.titulo

@@ -125,7 +125,7 @@ input{
     padding: 2px 2px 0 2px;
 }
 input[type="text"]{
-    width: 180px;
+    width: 160px;
 }
 input[type="text"]:focus{
     border: 1px #adcc0f solid;
@@ -134,6 +134,9 @@ input[type="submit"]{
     background-color: #7f7f7f;
     color: #fff;
     padding: 0 3px 2px 3px;
+}
+#id_cantidad{
+    width: 70px;
 }
 
 label{
