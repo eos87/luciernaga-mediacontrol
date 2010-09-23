@@ -113,7 +113,7 @@ ul{
 .main .center .footer{
     background: url(/files/images/footer.png) repeat-y;
     width: 100%;
-    height: 5px;    
+    height: 9px;
 }
 
 /* Estilo para los formularios */
@@ -173,7 +173,7 @@ img.aux{
     font: normal 11px "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
     border-right: 1px solid #E0DDD2;
     border-bottom: 1px solid #E0DDD2;
-    padding: 6px 20px 6px 12px;
+    padding: 6px 12px 6px 12px;
     color: #696969;
     background: #FFFFFF;
 }
@@ -188,3 +188,7 @@ table.mostar thead tr .headerSortDown {
     background-image: url(/files/images/desc.gif);
 }
 
+.maximo{
+    color: #959595;
+    font-size: 11px;
+}
