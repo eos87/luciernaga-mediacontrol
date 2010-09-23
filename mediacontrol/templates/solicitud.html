@@ -6,10 +6,10 @@
         background: url(/files/images/row2.png) no-repeat right;        
     }
 </style>
-<link type="text/css" rel="stylesheet" href="/files/css/style.css">
 <link type="text/css" rel="stylesheet" href="/files/css/simple-modal.css">
+<link type="text/css" rel="stylesheet" href="/files/css/osx.css">
 <script type="text/javascript" src="/files/js/jquery.simplemodal.min.js"></script>
-<script type="text/javascript" src="/files/js/jquery.cookie.js"></script>
+<script type="text/javascript" src="/files/js/modalosx.js"></script>
 <script type="text/javascript" src="/files/js/site.js"></script>
 {% endblock %}
 
@@ -35,6 +35,7 @@
                     <th>T&iacute;tulo</th>
                     <th>Autor</th>
                     <th>Tipo</th>
+                    <th>Cantidad</th>
                 </tr>
             </thead>
             <tbody>                
@@ -45,6 +46,15 @@
     {{a}}
 </div
 
+
+<div id="osx-modal-content">
+    <div id="osx-modal-title"></div>    
+    <div id="osx-modal-data">
+        <span style="font-size: 13px;">Agregar la cantidad deseada.</span><br>
+        <label>Cantidad: </label><input type="text" name="cantidad" id="id_cantidad">
+        <span id="max"><button id="modal-save">Agregar</button><br><br></span>
+    </div>
+</div>
 
 <iframe style="display: none;" id="load" src="/load/"
         width="670px"

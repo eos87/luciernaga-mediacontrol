@@ -210,7 +210,7 @@ def get_materiales(request):
     def iter_results(results):
         if results:
             for r in results:
-                yield '%s-%s|%s|%s|%s|%s|%s\n' % (r.codigo, r.titulo, r.codigo, r.titulo, r.autor, r.tipo, r.id)
+                yield '%s-%s|%s|%s|%s|%s|%s|%s\n' % (r.codigo, r.titulo, r.codigo, r.titulo, r.autor, r.tipo, r.id, r.cantidad)
 
     if not request.GET.get('q'):
         return HttpResponse(mimetype='text/plain')

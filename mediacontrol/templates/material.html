@@ -34,6 +34,7 @@
                     <th>Autor</th>
                     <th>Tipo</th>
                     <th>Tem&aacute;tica</th>
+                    <th>Cant</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -51,7 +52,10 @@
                         {% endfor %}
                     </td>
                     <td>
-                        <a href="/edit/material/{{material.id}}/" style="color: #069;"><img src="/files/images/editar2.png">Editar</a> | <a href="javascript:Borrar_material('{{material.id}}');" style="color: #069;"><img src="/files/images/borrar.png" alt="borrar">Borrar</a>
+                        {{material.cantidad}}
+                    </td>
+                    <td>
+                        <a href="/edit/material/{{material.id}}/" style="color: #069;"><img src="/files/images/editar2.png">Editar</a> <br> <a href="javascript:Borrar_material('{{material.id}}');" style="color: #069;"><img src="/files/images/borrar.png" alt="borrar">Borrar</a>
                     </td>
                 </tr>
                 {% endfor %}
