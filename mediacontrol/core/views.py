@@ -1,9 +1,8 @@
-from django.http import HttpResponse
-from django.http import HttpResponseRedirect
+from django.db.models import Q
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils import simplejson
-from django.db.models import Q
 from django.views.decorators.cache import cache_page
 from forms import *
 from models import *
@@ -13,7 +12,29 @@ def index(request):
 
 def add_solicitud(request):
     flag = 'solicitud'
+    list = []
     a = request.GET.get('q', '')
+    user_id = request.GET.get('user', '')
+    date = request.GET.get('date', '')
+    r = request.GET.get('r', '')
+    if a:
+        s = Solicitud()
+        s.persona = Persona.objects.get(pk=int(user_id))
+        s.fecha = datetime.datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
+        s.save()
+        q = a.split(',')
+        for elem in q:
+            m = Material.objects.get(pk=int(elem.split(':')[0]))
+            s.material.add(m)
+            s.save()
+            m.cantidad = m.cantidad - int(elem.split(':')[1])
+            m.save()
+            if r:
+                return HttpResponse('Generar reporte')
+            else:
+                return HttpResponse('Registro guardado')
+        
+
     form = SolicitudForm()
     return render_to_response('solicitud.html', RequestContext(request, locals()))
 
@@ -204,7 +225,7 @@ def buscar_solicitud(request):
 
 
 # Se vienen las vistas que son consultadas por medio de ajax
-#autocomplete
+# autocomplete
 def get_materiales(request):
 
     def iter_results(results):
@@ -223,9 +244,10 @@ def get_materiales(request):
         return HttpResponseBadRequest()
 
     qset = (
+            Q(cantidad__gt=0) &
             Q(titulo__icontains=query) |
-            Q(codigo__icontains=query)
-            )
+            Q(codigo__icontains=query)            
+            )    
     materiales = Material.objects.filter(qset).distinct()[:limit]
     #lista = [(p.id, p.nombre, p.apellido) for p in personas]
 

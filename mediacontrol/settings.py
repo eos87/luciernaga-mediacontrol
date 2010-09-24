@@ -95,5 +95,5 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'mediacontrol.core',
     'pagination',
-    'south',
+    #'south',
 )

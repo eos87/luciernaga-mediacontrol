@@ -66,7 +66,7 @@ class Solicitud(models.Model):
     fecha = models.DateTimeField()
 
     def __unicode__(self):
-        return self.fecha + ' - ' + self.persona + ' - ' + self.material
+        return self.persona.nombre
 
     class Meta:
         verbose_name = 'Solicitud'

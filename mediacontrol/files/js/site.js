@@ -22,36 +22,53 @@ $(document).ready(function(){
         var url = $.cookie('url');
         var id = data[5];
         var cant = data[6];
-        $('#osx-modal-title').html('Cantidad | ' + data[2] + ' | Máx.'+ data[6]);
+        //$('#osx-modal-title').html('Cantidad | ' + data[2] + ' | Máx.'+ data[6]);
         //$('#osx-modal-data').InitOSX(); sustituido por javascript prompt
-        
-        var cant2 = getCant(cant);
-        if (cant2 != null){
-            var lista = '<tr><td><a href="" onclick="$(this).parent().parent().remove(); Remove('+data[5]+','+cant2+'); return false;"><img src="/files/images/borrar.png" alt="borrar">Borrar</a></td>';
-            lista += '<td>'+data[1]+'</td><td>'+data[2]+'</td><td>'+data[3]+'</td><td>'+data[4]+'</td><td>'+cant2+' </td></tr>';
-            $('.mostrar tbody').append(lista);
+        if(url.search(id+':')!=-1){
+            alert('Ya has agregado ese material');
             $('#id_material').val('');
-            add2URL(id, cant2);
+        }else{
+            var cant2 = getCant(cant);
+            if (cant2 != null){
+                var lista = '<tr><td><a href="" onclick="$(this).parent().parent().remove(); Remove('+data[5]+','+cant2+'); return false;"><img src="/files/images/borrar.png" alt="borrar">Borrar</a></td>';
+                lista += '<td>'+data[1]+'</td><td>'+data[2]+'</td><td>'+data[3]+'</td><td>'+data[4]+'</td><td>'+cant2+' </td></tr>';
+                $('.mostrar tbody').append(lista);
+                $('#id_material').val('');
+                add2URL(id, cant2);
+            }
         }
-        
     });
-    $('#submit').click(function(){
+    $('#submit, #submit_reporte').click(function(){
         var url = $.cookie('url');
         var user = $('#id_userid').val();
         var fecha = $('#id_fecha').val();
+        
         if ((user=='') || (fecha=='')){
             alert('El campo y fecha son obligatorios.');
-        }else{
-            url += '&user='+user+'&date='+fecha;
+        }else if(url=='?q='){
+            alert('Debes agregar al menos un material.');
         }
-        alert(url);
+        else{
+            if($(this).attr('id')=='submit_reporte'){
+                url += '&user='+user+'&date='+fecha+'&r=1';
+            }else{
+                url += '&user='+user+'&date='+fecha;
+            }
+        }        
+        if(url!='?q='){
+            $.getJSON(url,
+                function(data){
+                    alert(data);
+                });
+        }
         return false;
+        
     });
 });
 
 function getCant(cant){
     var cant2 = prompt('Introduzca una cantidad. Máx '+cant,'');
-    if (cant2 == null){        
+    if (cant2 == null){
         
     }else if(cant2 == ''){
         alert('Debes ingresar una cantidad');
@@ -77,7 +94,16 @@ function add2URL(id, cant2){
 
 function Remove(id, cant2){
     var url = $.cookie('url');
-    url = url.replace(id+':'+cant2, '');
+    var a = url.search(','+id+':'+cant2+',');
+    if (a != -1){
+        url = url.replace(','+id+':'+cant2, '');
+    }else if(url.search('='+id+':'+cant2+',')!=-1){
+        url = url.replace(id+':'+cant2+',', '');
+    }else if(url.search(','+id+':'+cant2)!=-1){
+        url = url.replace(','+id+':'+cant2, '');
+    }else{
+        url = url.replace(id+':'+cant2, '');
+    }
     $.cookie('url', url);
 }
 
@@ -85,12 +111,26 @@ function getDateTime(){
     var date = new Date();
     var anio = date.getFullYear();
     var mes = date.getMonth();
+    if(parseInt(mes)<10){
+        mes = '0'+mes;
+    }
     var dia = date.getDate();
+    if(parseInt(dia)<10){
+        dia = '0'+dia;
+    }
     var hours = date.getHours();
+    if(parseInt(hours)<10){
+        hours = '0'+hours;
+    }
     var mins = date.getMinutes();
+    if(parseInt(mins)<10){
+        mins = '0'+mins;
+    }
     var secs = date.getSeconds();
-
-    var fecha = anio+'-0'+mes+'-0'+dia+' '+hours+':'+mins+':'+secs;
+    if(parseInt(secs)<10){
+        secs = '0'+secs;
+    }
+    var fecha = anio+'-'+mes+'-'+dia+' '+hours+':'+mins+':'+secs;
     return fecha;
 }
 
