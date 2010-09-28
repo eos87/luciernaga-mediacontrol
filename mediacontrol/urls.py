@@ -20,6 +20,7 @@ urlpatterns = patterns('',
                        (r'^add/otros/tematica/(?P<id>[-\w]+)/$', 'mediacontrol.core.views.add_otros_tematica_edit'),
                        (r'^add/otros/(?P<id>[-\w]+)/$', 'mediacontrol.core.views.add_otros_edit'),
                        (r'^load/$', 'mediacontrol.core.views.load'),
+                       (r'^reporte/(?P<id>[-\w]+)/$', 'mediacontrol.core.views.reportar'),
 
                        #vistas para busqueda
                        (r'^buscar/solicitud/$', 'mediacontrol.core.views.buscar_solicitud'),

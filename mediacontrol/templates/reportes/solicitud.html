@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+    <head>
+        <title>Solicitud {{s.fecha}}</title>
+        <style type="text/css">
+            @page {
+                size: A4 portrait;
+                margin: 1cm;
+                @frame footer {
+                -pdf-frame-content: footerContent;
+                bottom: 0cm;
+                margin-left: 9cm;
+                margin-right: 9cm;
+                height: 1cm;
+            }
+            }
+            body{
+                font-size: 12px;
+                font-family: 'Trebuchet MS', sans-serif;
+            }
+            td, th{
+                border-right: 1px solid #E0DDD2;
+                border-bottom: 1px solid #E0DDD2;                
+            }
+            td{
+                padding: 6px 12px 6px 12px;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <img src="http://mcontrol.fundacionluciernaga.org/files/images/logo.jpg" alt=""><br>
+            Nombre del solicitante: {{s.persona}}<br>
+            Organismo al que pertenece: {{s.persona.organizacion}}<br>
+            Correo Electr&oacute;nico: {{s.persona.email}} Tel&eacute;fono: {{s.persona.telefono}}<br>
+            Fecha: {{s.fecha}}<br>
+            Profesi&oacute;n:<br>
+            {% for a in s.persona.profesion.all %}
+            {{a.nombre}}{% if forloop.last %} {% else %}, {% endif %}
+            {% endfor %}
+            <table class="mostrar">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Titulos</th>
+                        <th>Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for m in s.material.all %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>{{m.titulo}}</td>
+                        <td>{{m.cantidad}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div id="footerContent">
+            {%block page_foot%}
+            P&aacute;gina <pdf:pagenumber>
+                {%endblock%}
+        </div>
+
+    </body>
+</html>

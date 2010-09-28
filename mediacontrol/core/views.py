@@ -1,11 +1,13 @@
 from django.db.models import Q
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils import simplejson
 from django.views.decorators.cache import cache_page
 from forms import *
 from models import *
+from utils import *
 
 def index(request):
     return render_to_response('index.html', RequestContext(request, locals()))
@@ -19,7 +21,8 @@ def add_solicitud(request):
     r = request.GET.get('r', '')
     if a:
         s = Solicitud()
-        s.persona = Persona.objects.get(pk=int(user_id))
+        person = Persona.objects.get(pk=int(user_id))
+        s.persona = person
         s.fecha = datetime.datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
         s.save()
         q = a.split(',')
@@ -30,13 +33,17 @@ def add_solicitud(request):
             m.cantidad = m.cantidad - int(elem.split(':')[1])
             m.save()
             if r:
-                return HttpResponse('Generar reporte')
+                lista = '/reporte/'+str(s.pk)
+                return HttpResponse(simplejson.dumps(lista), mimetype='application/javascript')
             else:
-                return HttpResponse('Registro guardado')
-        
+                return HttpResponse('/add/solicitud/')
 
     form = SolicitudForm()
     return render_to_response('solicitud.html', RequestContext(request, locals()))
+
+def reportar(request, id):
+    s = Solicitud.objects.get(pk=id)
+    return render_to_pdf('reportes/solicitud.html', {'s': s,})
 
 def add_persona(request):
     flag = 'persona'
@@ -246,8 +253,8 @@ def get_materiales(request):
     qset = (
             Q(cantidad__gt=0) &
             Q(titulo__icontains=query) |
-            Q(codigo__icontains=query)            
-            )    
+            Q(codigo__icontains=query)
+            )
     materiales = Material.objects.filter(qset).distinct()[:limit]
     #lista = [(p.id, p.nombre, p.apellido) for p in personas]
 

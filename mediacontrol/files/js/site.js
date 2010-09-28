@@ -58,9 +58,9 @@ $(document).ready(function(){
         if(url!='?q='){
             $.getJSON(url,
                 function(data){
-                    alert(data);
+                    window.location.href = data;
                 });
-        }
+            }
         return false;
         
     });
