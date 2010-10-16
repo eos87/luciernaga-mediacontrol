@@ -192,3 +192,25 @@ table.mostar thead tr .headerSortDown {
     color: #959595;
     font-size: 11px;
 }
+.solicitud_reports{
+    border: 1px #eaeaea solid;
+    width: 470px;
+    padding-top: 8px;
+}
+.solicitud_reports span{
+    font-size: 13px;    
+}
+.solicitud_report_form1{
+    margin-left: 15px;
+}
+.solicitud_graficos{
+    border: 1px #eaeaea solid;
+    width: 470px;
+    padding-top: 8px;    
+}
+.grafico1{
+    position:relative;
+    width: 640px;
+    border: 1px #eaeaea solid;    
+    margin-top: 5px;    
+}

@@ -1,7 +1,6 @@
 <ul>
     <li class="title">Reportes</li>
-    <li><a href="/reportes/x-mes/">Por Mes</a></li>
-    <li><a href="/reportes/x-anio/">Por A&ntilde;o</a></li>
-    <li><a href="/reportes/especifico/">Espec&iacute;fico</a>
+    <li><a {% ifequal flag 'reportes' %}class="selected" style="color: #6c6c6c;"{% endifequal %} href="/reportes/">Generar</a></li>
+    <li><a {% ifequal flag 'graficos' %}class="selected" style="color: #6c6c6c;"{% endifequal %} href="/graficos/">Gr&aacute;ficos</a></li>
     <li class="footer"></li>
 </ul>

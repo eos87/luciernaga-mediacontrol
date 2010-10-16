@@ -58,7 +58,12 @@ $(document).ready(function(){
         if(url!='?q='){
             $.getJSON(url,
                 function(data){
-                    window.location.href = data;
+                    $('#id_persona').val('');
+                    $('#id_userid').val('');
+                    $.cookie('url', '?q=');
+                    $('.mostrar tbody').html('');
+                    $('#id_material').flushCache();                    
+                    window.location = data;
                 });
             }
         return false;

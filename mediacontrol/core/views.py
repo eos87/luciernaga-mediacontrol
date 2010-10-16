@@ -1,4 +1,7 @@
+# -*- coding: UTF-8 -*-
+import datetime
 from django.db.models import Q
+from django.db.models import Sum
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
@@ -8,6 +11,7 @@ from django.views.decorators.cache import cache_page
 from forms import *
 from models import *
 from utils import *
+from mediacontrol.settings import *
 
 def index(request):
     return render_to_response('index.html', RequestContext(request, locals()))
@@ -27,23 +31,92 @@ def add_solicitud(request):
         s.save()
         q = a.split(',')
         for elem in q:
+            #instancia para guardar los materiales de la solicitud
+            agregado = Agregado()
+            agregado.solicitud = s
+            #crear material solicitado
             m = Material.objects.get(pk=int(elem.split(':')[0]))
-            s.material.add(m)
-            s.save()
+            agregado.material = m
+            agregado.cantidad = int(elem.split(':')[1])
+            agregado.save()
+            #restando la cantidad de material en inventario
             m.cantidad = m.cantidad - int(elem.split(':')[1])
             m.save()
-            if r:
-                lista = '/reporte/'+str(s.pk)
-                return HttpResponse(simplejson.dumps(lista), mimetype='application/javascript')
-            else:
-                return HttpResponse('/add/solicitud/')
+        if r:
+            lista = '/reporte/' + str(s.pk)
+            return HttpResponse(simplejson.dumps(lista), mimetype='application/javascript')
+        else:
+            return HttpResponse(simplejson.dumps('/add/solicitud/'), mimetype='application/javascript')
 
     form = SolicitudForm()
     return render_to_response('solicitud.html', RequestContext(request, locals()))
 
 def reportar(request, id):
     s = Solicitud.objects.get(pk=id)
-    return render_to_pdf('reportes/solicitud.html', {'s': s,})
+    return render_to_pdf('reportes/solicitud.html', {'s': s, })
+
+def material_report(request):
+    materiales = Material.objects.filter(cantidad__gt=0)
+    anio = datetime.date.today().year
+    mes = dicc[int(datetime.date.today().month)]
+    return render_to_pdf('reportes/materiales.html', {'materiales': materiales, 'mes':mes, 'anio':anio})
+
+def reportes(request):
+    flag = 'reportes'
+    if request.method == 'POST':
+        form = ReportForm(request.POST)        
+        if form.is_valid():
+            data = []
+            todos = form.cleaned_data['mes']
+
+            for m in todos:
+                data.append(dicc[int(m)])
+                
+            primero = todos.pop(0)
+            q = Solicitud.objects.filter(fecha__month=primero, fecha__year=form.cleaned_data['anio'])
+            for m in todos:
+                query = Solicitud.objects.filter(fecha__month=m, fecha__year=form.cleaned_data['anio'])
+                q = q | query
+            s = q.order_by('fecha')
+                
+            return render_to_pdf('reportes/solicitudes.html', {'s': s, 'anio': request.POST['anio'], 'meses': data})
+    else:
+        form = ReportForm()
+    return render_to_response('reportes.html', RequestContext(request, locals()))
+
+def graficos(request):
+    flag = 'graficos'
+    bandera = False
+    #femenino = []
+    if request.method == 'POST':
+        form = VariablesForm(request.POST)
+        if form.is_valid():
+            bandera = True
+            var = form.cleaned_data['variable']
+            anio = form.cleaned_data['anio']
+            query = Solicitud.objects.filter(fecha__year=int(anio))
+            masculino_salida = {}
+            femenino_salida = {}
+            if var == 'sexo':                                
+                masculino = Agregado.objects.filter(solicitud__in=query, solicitud__persona__sexo='masculino')
+                femenino = Agregado.objects.filter(solicitud__in=query, solicitud__persona__sexo='femenino')
+                for key,value in dicc.items():
+                    valor = masculino.filter(solicitud__fecha__month=key).aggregate(month_sum=Sum('cantidad'))['month_sum']
+                    if valor != None:
+                        masculino_salida[key] = valor
+                    else:
+                        masculino_salida[key] = 0
+
+                    valor2 = femenino.filter(solicitud__fecha__month=key).aggregate(month_sum=Sum('cantidad'))['month_sum']
+                    if valor2 != None:
+                        femenino_salida[key] = valor2
+                    else:
+                        femenino_salida[key] = 0
+
+                return render_to_response('graficos.html', RequestContext(request, locals()))
+    else:
+        form = VariablesForm()
+    return render_to_response('graficos.html', RequestContext(request, locals()))
 
 def add_persona(request):
     flag = 'persona'
@@ -198,13 +271,11 @@ def add_otros_tipo_edit(request, id):
 
 
 def load(request):
-
     query = request.GET.get('q')
     qset = (
             Q(nombre__icontains=query) |
             Q(apellido__icontains=query)
             )
-
     if query:
         personas = Persona.objects.filter(qset).distinct()
     else:
@@ -230,11 +301,9 @@ def buscar_solicitud(request):
     return render_to_response('buscar.html', RequestContext(request, locals()))
 
 
-
 # Se vienen las vistas que son consultadas por medio de ajax
 # autocomplete
 def get_materiales(request):
-
     def iter_results(results):
         if results:
             for r in results:

@@ -6,8 +6,6 @@ $(" #nav li").hover(function(){
 		$(this).find('ul:first').css({visibility: "hidden"});
 		});
 }
-
- 
  
  $(document).ready(function(){					
 	mainmenu();

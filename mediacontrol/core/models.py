@@ -1,3 +1,5 @@
+# -*- coding: UTF-8 -*-
+
 from django.db import models
 
 class Profesion(models.Model):
@@ -10,9 +12,12 @@ class Profesion(models.Model):
         verbose_name = 'Profesion'
         verbose_name_plural = 'Profesiones'
 
+SEXOS = (('femenino','Femenino'), ('masculino', 'Masculino'))
+
 class Persona(models.Model):
     nombre = models.CharField(max_length=100)
     apellido = models.CharField(max_length=100)
+    sexo = models.CharField(max_length=10, choices=SEXOS)
     email = models.EmailField(blank=True, null=True)
     telefono = models.CharField(max_length=30, null=True, blank=True)
     organizacion = models.CharField(max_length=200)
@@ -61,8 +66,7 @@ class Material(models.Model):
         verbose_name_plural = 'Materiales'
 
 class Solicitud(models.Model):
-    persona = models.ForeignKey(Persona)
-    material = models.ManyToManyField(Material)
+    persona = models.ForeignKey(Persona)    
     fecha = models.DateTimeField()
 
     def __unicode__(self):
@@ -70,4 +74,15 @@ class Solicitud(models.Model):
 
     class Meta:
         verbose_name = 'Solicitud'
-        verbose_name_plural = 'Solicitudes'
+        verbose_name_plural = 'Solicitudes'    
+
+class Agregado(models.Model):
+    solicitud = models.ForeignKey(Solicitud)
+    material = models.ForeignKey(Material)
+    cantidad = models.IntegerField()
+
+    def __unicode__(self):
+        return ''
+    
+    class Meta:
+        verbose_name_plural = 'Agregados'

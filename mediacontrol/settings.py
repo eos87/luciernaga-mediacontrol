@@ -7,19 +7,34 @@ import os
 PROJECT_DIR = os.path.dirname(__file__)
 
 ADMINS = (
-    ('Helmy Giacoman', 'helmygb@gmail.com'),
-)
+          ('Helmy Giacoman', 'helmygb@gmail.com'),
+          )
 
 MANAGERS = ADMINS
 
+dicc = {
+    1:'Enero',
+    2:'Febrero',
+    3:'Marzo',
+    4:'Abril',
+    5:'Mayo',
+    6:'Junio',
+    7:'Julio',
+    8:'Agosto',
+    9:'Septiembre',
+    10:'Octubre',
+    11:'Noviembre',
+    12:'Diciembre'
+}
+    
 DATABASES = {
     'default': {
         'ENGINE': 'mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'rpnnicac_mediacontrol',                      # Or path to database file if using sqlite3.
-        'USER': 'rpnnicac_mroot',                      # Not used with sqlite3.
-        'PASSWORD': 'lTzxSsvGA5E?',                  # Not used with sqlite3.
-        'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '3306',                      # Set to empty string for default. Not used with sqlite3.
+        'NAME': 'rpnnicac_mediacontrol', # Or path to database file if using sqlite3.
+        'USER': 'rpnnicac_mroot', # Not used with sqlite3.
+        'PASSWORD': 'lTzxSsvGA5E?', # Not used with sqlite3.
+        'HOST': 'localhost', # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '3306', # Set to empty string for default. Not used with sqlite3.
     }
 }
 
@@ -65,35 +80,35 @@ SECRET_KEY = '$)(imywsqld=ob@&$cc#$6spwq+x8y3@bb*rr%j@)50nqh^o1('
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
-)
+                    'django.template.loaders.filesystem.Loader',
+                    'django.template.loaders.app_directories.Loader',
+                    #     'django.template.loaders.eggs.Loader',
+                    )
 
 MIDDLEWARE_CLASSES = (
-    'django.middleware.common.CommonMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'pagination.middleware.PaginationMiddleware',
-)
+                      'django.middleware.common.CommonMiddleware',
+                      'django.contrib.sessions.middleware.SessionMiddleware',
+                      'django.middleware.csrf.CsrfViewMiddleware',
+                      'django.contrib.auth.middleware.AuthenticationMiddleware',
+                      'django.contrib.messages.middleware.MessageMiddleware',
+                      'pagination.middleware.PaginationMiddleware',
+                      )
 
 ROOT_URLCONF = 'mediacontrol.urls'
 
 TEMPLATE_DIRS = (
-    os.path.join(os.path.dirname(__file__), 'templates').replace('\\','/'),
-)
+                 os.path.join(os.path.dirname(__file__), 'templates').replace('\\', '/'),
+                 )
 
 INSTALLED_APPS = (
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.sites',
-    'django.contrib.messages',
-    # Uncomment the next line to enable the admin:
-    'django.contrib.admin',
-    'mediacontrol.core',
-    'pagination',
-    #'south',
-)
+                  'django.contrib.auth',
+                  'django.contrib.contenttypes',
+                  'django.contrib.sessions',
+                  'django.contrib.sites',
+                  'django.contrib.messages',
+                  # Uncomment the next line to enable the admin:
+                  'django.contrib.admin',
+                  'mediacontrol.core',
+                  'pagination',
+                  'south',
+                  )

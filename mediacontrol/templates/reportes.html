@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block extrahead %}
+<style type="text/css">
+    .selected{
+        background: url(/files/images/row2.png) no-repeat right;
+    }
+</style>
+{% endblock %}
+{% block leftmenu %}
+{% include "left_reportes.html" %}
+{% endblock %}
+
+{% block data %}
+<div style="margin-left: 15px;">
+    <img style="float: right; margin-right: 40px;" src="/files/images/reports.png" alt="Solicitantes">
+    <span style="color: #069;">Generar Reportes</span><br><br>
+    <div class="solicitud_reports">        
+        <center><span style="color: #069;">Solicitudes</span></center><br>
+        <div class="solicitud_report_form1">
+            <form action="." method="POST">{% csrf_token %}
+                <table>
+                    <tr>
+                        <th><label for="id_mes">Mes:</label></th>
+                        <td>
+                            {{form.mes}}
+                        </td>
+                        <th><label for="id_anio">Año:</label></th>
+                        <td>
+                            {{form.anio}}
+                        </td>
+                        <td>
+                            <input type="submit" value="Generar">
+                        </td>
+                    </tr>                    
+                </table>
+            </form>
+        </div>
+    </div>
+    <br>
+    <div class="solicitud_reports">
+        <center><span style="color: #069;">Otros</span></center><br>
+        <div class="solicitud_report_form1">
+            <form action="/reportes/materiales/" method="POST">{% csrf_token %}
+                <table>
+                    <tr>
+                        <th><label for="id_mes">Reporte de materiales disponibles:</label></th>
+                        <td>
+                            <input type="submit" value="Generar">
+                        </td>
+                    </tr>
+                </table>
+            </form>            
+        </div>
+    </div>
+</div>
+{% endblock %}

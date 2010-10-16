@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>Solicitud {{s.fecha}}</title>
+        <style type="text/css">
+            @page {
+                size: A4 portrait;
+                margin: 1cm;
+                @frame footer {
+                -pdf-frame-content: footerContent;
+                bottom: 0cm;
+                margin-left: 9cm;
+                margin-right: 9cm;
+                height: 1cm;
+            }
+            }
+            body{
+                font-size: 12px;
+                font-family: 'Trebuchet MS', sans-serif;
+            }
+            th{
+                background-color: #ded3ba;
+                font-family: 'Trebuchet MS', sans-serif;                
+            }
+            td, th{
+                border: 1px solid #E0DDD2;
+                padding: 3px 2px -1px 8px;
+            }
+            .datos span{
+                font-weight: bold;
+                line-height: 16px;
+            }
+            .materiales{
+                font-size: 10px;
+            }            
+        </style>
+    </head>
+    <body>
+        <div>
+            <img src="http://mcontrol.fundacionluciernaga.org/files/images/logo.jpg" alt="">
+            <div class="datos"><br><br>
+                <span style="font-size: 14px;">Filtros</span><br><br>
+                <span>Meses: </span>{% for m in meses %}{{m}}{% if forloop.last %}{% else %}, {% endif %}{% endfor %}<br>
+                <span>A&ntilde;o: </span>{{anio}}
+            </div>
+            <br><br>
+            <table class="mostrar">
+                <thead>
+                    <tr>
+                        <th>Id.</th>
+                        <th>Fecha</th>
+                        <th>Solicitante</th>
+                        <th>Materiales</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for solicitud in s %}
+                    <tr>
+                        <td>{{solicitud.id}}</td>
+                        <td>{{solicitud.fecha}}</td>
+                        <td>{{solicitud.persona}}</td>
+                        <td class="materiales">
+                            {% for i in solicitud.agregado_set.all %}
+                            {{i.material.titulo}},
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    {% endfor %}                    
+                </tbody>
+            </table>
+        </div>
+        <div id="footerContent">
+            {%block page_foot%}
+            P&aacute;gina <pdf:pagenumber>
+                {%endblock%}
+        </div>
+    </body>
+</html>

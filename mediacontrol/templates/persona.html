@@ -33,6 +33,7 @@
                     <th>Email</th>
                     <th>Tel&eacute;fono</th>
                     <th>ORG</th>
+                    <th>Sexo</th>
                     <th>Profesion</th>
                     <th>Acciones</th>
                 </tr>
@@ -45,6 +46,7 @@
                     <td>{{solicitante.email}}</td>
                     <td>{{solicitante.telefono}}</td>
                     <td>{{solicitante.organizacion}}</td>
+                    <td>{{solicitante.sexo}}</td>
                     <td>
                         {% for pro in solicitante.profesion.all %}
                         {{pro.nombre}}{% if forloop.last %}{% else %},<br>{% endif %}

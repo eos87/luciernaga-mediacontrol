@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-    <head>        
+    <head>
         <title>Solicitud {{s.fecha}}</title>
         <style type="text/css">
             @page {
@@ -13,7 +13,7 @@
                 margin-right: 9cm;
                 height: 1cm;
             }
-            }            
+            }
             body{
                 font-size: 12px;
                 font-family: 'Trebuchet MS', sans-serif;
@@ -24,44 +24,48 @@
             }
             td, th{
                 border: 1px solid #E0DDD2;
-                padding: 3px 2px -1px 8px;                
+                padding: 3px 2px -1px 8px;
             }
             .datos span{
                 font-weight: bold;
                 line-height: 16px;
             }
+            .materiales{
+                font-size: 10px;
+            }
         </style>
     </head>
     <body>
         <div>
-            <img src="http://mcontrol.fundacionluciernaga.org/files/images/logo.jpg" alt=""><br><br>
-            <div class="datos">
-                <span>Nombre del solicitante: </span>{{s.persona}}<br>
-                <span>Organismo al que pertenece: </span>{{s.persona.organizacion}}<br>
-                <span>Correo Electr&oacute;nico: </span>{{s.persona.email}} <span>Tel&eacute;fono: </span>{{s.persona.telefono}}<br>
-                <span>Fecha: </span>{{s.fecha}}<br>
-                <span>Profesi&oacute;n:</span>
-                {% for a in s.persona.profesion.all %}
-                {{a.nombre}}{% if forloop.last %} {% else %}, {% endif %}
-                {% endfor %}
-                <br><br>
+            <img src="http://mcontrol.fundacionluciernaga.org/files/images/logo.jpg" alt="">
+            <div class="datos"><br><br>
+                <span style="font-size: 14px;">Materiales disponibles {{mes}} {{anio}}</span><br><br>
             </div>
+            <br><br>
             <table class="mostrar">
                 <thead>
                     <tr>
-                        <th>No.</th>
                         <th>C&oacute;digo</th>
                         <th>T&iacute;tulo</th>
-                        <th>Cantidad</th>
+                        <th>Autor</th>
+                        <th>Tipo</th>
+                        <th>Tem&aacute;tica</th>
+                        <th>Cant. disp.</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for agregado in s.agregado_set.all %}
+                    {% for material in materiales %}
                     <tr>
-                        <td>{{forloop.counter}}</td>
-                        <td>{{agregado.material.codigo}}</td>
-                        <td>{{agregado.material.titulo}}</td>
-                        <td>{{agregado.cantidad}}</td>
+                        <td>{{material.codigo}}</td>
+                        <td>{{material.titulo}}</td>
+                        <td>{{material.autor}}</td>
+                        <td>{{material.tipo}}</td>
+                        <td class="materiales">
+                            {% for i in material.tematica.all %}
+                            {{i.nombre}}{% if forloop.last %}{% else %}, {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>{{material.cantidad}}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -69,9 +73,9 @@
         </div>
         <div id="footerContent">
             {%block page_foot%}
-                P&aacute;gina <pdf:pagenumber>
-            {%endblock%}
+            P&aacute;gina <pdf:pagenumber>
+                {%endblock%}
         </div>
-
     </body>
 </html>
+

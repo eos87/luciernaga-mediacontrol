@@ -7,4 +7,5 @@ admin.site.register(Solicitud)
 admin.site.register(Tipo)
 admin.site.register(Tematica)
 admin.site.register(Profesion)
+admin.site.register(Agregado)
 

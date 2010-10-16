@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block extrahead %}
+<script type="text/javascript" src="/files/js/highcharts.js"></script>
+<script type="text/javascript" src="/files/js/exporting.js"></script>
+<style type="text/css">
+    .selected{
+        background: url(/files/images/row2.png) no-repeat right;
+    }
+</style>
+<script type="text/javascript">
+    var chart;
+    jQuery(document).ready(function() {
+        Highcharts.setOptions({
+            lang: {
+                downloadPNG: 'Guardar como imagen',
+                downloadJPEG: '',
+                downloadPDF: 'Guardar como PDF',
+                downloadSVG: '',
+                exportButtonTitle: 'Guardar grafico',
+                printButtonTitle: 'Imprimir'
+            }
+        });
+        chart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'grafo1',
+                defaultSeriesType: 'line',
+                marginRight: 130,
+                marginBottom: 25
+            },
+            credits: {
+                enabled: false
+            },            
+            colors : [
+                '#f7c12f',
+                '#339900'
+            ],
+            title: {
+                text: 'Cantidad mensual solicitada por diferentes sexos',
+                x: -20 //center
+            },
+            subtitle: {
+                text: 'Año {{anio}}',
+                x: -20
+            },
+            xAxis: {
+                categories: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+                    'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
+            },
+            yAxis: {
+                title: {
+                    text: 'Cantidad de materiales'
+                },
+                plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+            },
+            tooltip: {
+                formatter: function() {
+                    return '<b>'+ this.series.name +'</b><br/>'+
+                        this.x +': '+ this.y +'u';
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'top',
+                x: -10,
+                y: 100,
+                borderWidth: 0
+            },
+            series: [{
+                    name: 'Masculino',
+                    data: [{% for k,v in masculino_salida.items %}{{v}}{% if forloop.last %}{% else %},{% endif %}{% endfor %}]
+                }, {
+                    name: 'Femenino',
+                    data: [{% for k,v in femenino_salida.items %}{{v}}{% if forloop.last %}{% else %},{% endif %}{% endfor %}]
+                }]
+        });
+    });
+
+</script>
+{% endblock %}
+{% block leftmenu %}
+{% include "left_reportes.html" %}
+{% endblock %}
+
+{% block data %}
+<div style="margin-left: 15px;">
+    <img style="float: right; margin-right: 40px;" src="/files/images/charts.png" alt="Solicitantes">
+    <span style="color: #069;">Generar Graficos</span><br><br>
+    <div class="solicitud_graficos">
+        <center><span style="color: #069;">Gr&aacute;fico cruce de variables</span></center><br>
+        <div class="solicitud_report_form1">
+            <form action="." method="POST">{% csrf_token %}
+                <table>
+                    {{form.as_table}}
+                </table>
+                <input type="submit" value="Generar">
+            </form>
+        </div>
+    </div>
+    {% if bandera %}        
+    <div class="grafico1">
+        <div id="grafo1" style="height:370px; clear:both">
+
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
