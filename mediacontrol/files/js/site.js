@@ -117,7 +117,7 @@ function getDateTime(){
     var anio = date.getFullYear();
     var mes = date.getMonth();
     if(parseInt(mes)<10){
-        mes = '0'+mes;
+        mes = '0'+(mes+1);
     }
     var dia = date.getDate();
     if(parseInt(dia)<10){
