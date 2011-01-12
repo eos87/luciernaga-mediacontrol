@@ -39,6 +39,7 @@ urlpatterns = patterns('',
                        (r'^ajax/borrar-material/(?P<id>[-\w]+)/$', 'mediacontrol.core.views.del_material'),
                        (r'^ajax/borrar-solicitante/(?P<id>[-\w]+)/$', 'mediacontrol.core.views.del_persona'),
 
-
+                       (r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html'}),
+                       (r'^logout/$', 'django.contrib.auth.views.logout', {'template_name': 'logout.html'}),
                        (r'^admin/', include(admin.site.urls)),
                        )

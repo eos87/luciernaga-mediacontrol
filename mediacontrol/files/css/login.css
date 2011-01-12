@@ -1,0 +1,82 @@
+.edit-form{
+    font-size:12px;
+    font-weight: normal;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 100px;
+    background: #fff;
+    text-align: center;
+    border: 1px solid #ccc;
+    width: 420px;
+    height: 200px;
+    font-family: "Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+}
+.edit-form form table{    
+    margin: 20px auto 0px;
+}
+.edit-form label{
+    font-family: "Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+    font-weight: normal;
+    float: right;
+    margin-right: 10px;
+    font-size: 12px;
+
+}
+
+.edit-form input{
+    border: 1px solid #959595;
+    font-size: 12px;
+    height: 20px;
+    width: 150px;
+    margin-top: 3px;
+    padding: 2px 3px 0px 3px;
+}
+
+.edit-form select{
+    margin-top: 3px;
+    border: 1px solid #959595;
+    font-size: 11px;
+}
+
+.edit-form input:hover{
+    border:1px solid #358ec1;
+}
+
+.edit-form input:focus{
+    color: #358ec1;
+}
+
+.edit-form select:hover{
+    border:1px solid #358ec1;
+}
+
+.edit-form .submit{
+    background: white url(/media/img/admin/nav-bg.gif) bottom repeat-x;
+    color: black;
+    border: 1px solid #bbb;
+    border-color: #ddd #aaa #aaa #ddd;
+    width: 120px;    
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.edit-form .submit:hover{
+    background: white url(/media/img/admin/nav-bg.gif) bottom repeat-x;
+    color: black;
+    border: 1px solid #bbb;
+    border-color: #ddd #aaa #aaa #ddd;
+}
+
+ul.errorlist{
+    color: red;
+    font-size: 11px;
+}
+
+button::-moz-focus-inner,
+input[type="reset"]::-moz-focus-inner,
+input[type="button"]::-moz-focus-inner,
+input[type="submit"]::-moz-focus-inner,
+input[type="file"] > input[type="button"]::-moz-focus-inner {
+    border: 1px dotted transparent;
+}
+

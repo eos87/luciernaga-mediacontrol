@@ -5,6 +5,7 @@ from django.db.models import Sum
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
+from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from django.utils import simplejson
 from django.views.decorators.cache import cache_page
@@ -13,9 +14,11 @@ from models import *
 from utils import *
 from mediacontrol.settings import *
 
+@login_required
 def index(request):
     return render_to_response('index.html', RequestContext(request, locals()))
 
+@login_required
 def add_solicitud(request):
     flag = 'solicitud'
     list = []
@@ -61,6 +64,7 @@ def material_report(request):
     mes = dicc[int(datetime.date.today().month)]
     return render_to_pdf('reportes/materiales.html', {'materiales': materiales, 'mes':mes, 'anio':anio})
 
+@login_required
 def reportes(request):
     flag = 'reportes'
     if request.method == 'POST':
@@ -84,6 +88,7 @@ def reportes(request):
         form = ReportForm()
     return render_to_response('reportes.html', RequestContext(request, locals()))
 
+@login_required
 def graficos(request):
     flag = 'graficos'
     bandera = False
@@ -118,6 +123,7 @@ def graficos(request):
         form = VariablesForm()
     return render_to_response('graficos.html', RequestContext(request, locals()))
 
+@login_required
 def add_persona(request):
     flag = 'persona'
     solicitantes = Persona.objects.all().order_by('-id')
@@ -131,6 +137,7 @@ def add_persona(request):
         
     return render_to_response('persona.html', RequestContext(request, locals()))
 
+@login_required
 def edit_persona(request, id):
     flag = 'persona'
     solicitantes = Persona.objects.all().order_by('-id')
@@ -145,6 +152,7 @@ def edit_persona(request, id):
 
     return render_to_response('persona.html', RequestContext(request, locals()))
 
+@login_required
 def add_material(request):
     flag = 'material'
     materiales = Material.objects.all().order_by('-id')
@@ -159,6 +167,7 @@ def add_material(request):
         
     return render_to_response('material.html', RequestContext(request, locals()))
 
+@login_required
 def edit_material(request, id):
     flag = 'material'
     materiales = Material.objects.all().order_by('-id')
@@ -173,6 +182,7 @@ def edit_material(request, id):
 
     return render_to_response('material.html', RequestContext(request, locals()))
 
+@login_required
 def add_otros(request):
     flag = 'otros'
     if request.method == 'POST':
@@ -186,6 +196,7 @@ def add_otros(request):
         form_tematica = TematicaForm()
     return render_to_response('otros.html', RequestContext(request, locals()))
 
+@login_required
 def add_otros_edit(request, id):
     flag = 'otros'
     pro = Profesion.objects.get(pk=id)
@@ -205,6 +216,7 @@ def add_otros_edit(request, id):
 
     return render_to_response('otros_edit_profesion.html', RequestContext(request, locals()))
 
+@login_required
 def add_otros_tematica(request):
     flag = 'otros'
     if request.method == 'POST':
@@ -218,6 +230,7 @@ def add_otros_tematica(request):
         form_tematica = TematicaForm()
     return render_to_response('otros.html', RequestContext(request, locals()))
 
+@login_required
 def add_otros_tematica_edit(request, id):
     flag = 'otros'
     obj = Tematica.objects.get(pk=id)
@@ -237,6 +250,7 @@ def add_otros_tematica_edit(request, id):
 
     return render_to_response('otros_edit_tematica.html', RequestContext(request, locals()))
 
+@login_required
 def add_otros_tipo(request):
     flag = 'otros'
     if request.method == 'POST':
@@ -250,6 +264,7 @@ def add_otros_tipo(request):
         form_tematica = TematicaForm()
     return render_to_response('otros.html', RequestContext(request, locals()))
 
+@login_required
 def add_otros_tipo_edit(request, id):
     flag = 'otros'
     obj = Tipo.objects.get(pk=id)

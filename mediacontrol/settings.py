@@ -112,3 +112,6 @@ INSTALLED_APPS = (
                   'pagination',
                   'south',
                   )
+
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
