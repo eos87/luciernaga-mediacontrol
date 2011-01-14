@@ -29,8 +29,8 @@ dicc = {
     
 DATABASES = {
     'default': {
-        'ENGINE': 'sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'mediacontrol', # Or path to database file if using sqlite3.
+        'ENGINE': 'mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'rpnnicac_mediacontrol', # Or path to database file if using sqlite3.
         'USER': 'rpnnicac_mroot', # Not used with sqlite3.
         'PASSWORD': 'lTzxSsvGA5E?', # Not used with sqlite3.
         'HOST': 'localhost', # Set to empty string for localhost. Not used with sqlite3.
