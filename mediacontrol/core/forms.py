@@ -21,6 +21,7 @@ class MaterialForm(forms.ModelForm):
 
 class PersonaForm(forms.ModelForm):
     profesion = forms.ModelMultipleChoiceField(queryset=Profesion.objects.all(), widget=forms.CheckboxSelectMultiple, help_text="")
+    org2 = forms.CharField(max_length=150, label='Organizacion2')
     class Meta:
         model = Persona
         

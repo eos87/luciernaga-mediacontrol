@@ -18,6 +18,7 @@ $(document).ready(function(){
     $('#id_persona').click(function(){
         openWindow('load');
     });
+    $('#id_org2').autocomplete('/ajax/org2/');
     $('#id_material').autocomplete('/ajax/personas/').result(function(evt, data, formatted){
         var url = $.cookie('url');
         var id = data[5];

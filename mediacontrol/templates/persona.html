@@ -42,10 +42,30 @@
                 {% autopaginate solicitantes 20 %}
                 {% for solicitante in solicitantes %}
                 <tr>
-                    <td>{{solicitante.nombre}} {{solicitante.apellido}}</td>
-                    <td>{{solicitante.email}}</td>
-                    <td>{{solicitante.telefono}}</td>
-                    <td>{{solicitante.organizacion}}</td>
+                    <td>
+                        {{solicitante.nombre}} {{solicitante.apellido}}
+                    </td>
+                    <td>
+                        {% if solicitante.email %}
+                        {{solicitante.email}}
+                        {% else %}
+                        &nbsp;
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if solicitante.telefono %}
+                        {{solicitante.telefono}}
+                        {% else %}
+                        &nbsp;
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if solicitante.organizacion %}
+                        {{solicitante.organizacion}}
+                        {% else %}
+                        &nbsp;
+                        {% endif %}
+                    </td>
                     <td>{{solicitante.sexo}}</td>
                     <td>
                         {% for pro in solicitante.profesion.all %}

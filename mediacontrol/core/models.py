@@ -12,7 +12,16 @@ class Profesion(models.Model):
         verbose_name = 'Profesion'
         verbose_name_plural = 'Profesiones'
 
-SEXOS = (('femenino','Femenino'), ('masculino', 'Masculino'))
+class Organizacion(models.Model):
+    nombre = models.CharField(max_length=100)
+
+    def __unicode__(self):
+        return self.nombre
+
+    class Meta:
+        verbose_name_plural = 'Organizaciones'
+
+SEXOS = (('femenino', 'Femenino'), ('masculino', 'Masculino'))
 
 class Persona(models.Model):
     nombre = models.CharField(max_length=100)
@@ -21,10 +30,11 @@ class Persona(models.Model):
     email = models.EmailField(blank=True, null=True)
     telefono = models.CharField(max_length=30, null=True, blank=True)
     organizacion = models.CharField(max_length=200)
+    org2 = models.ForeignKey(Organizacion)
     profesion = models.ManyToManyField(Profesion)
 
     def __unicode__(self):
-        return self.nombre + ' ' + self.apellido
+        return '%s %s' % (self.nombre, self.apellido)
 
     class Meta:
         verbose_name = 'Persona'

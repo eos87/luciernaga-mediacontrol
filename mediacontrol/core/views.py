@@ -298,6 +298,28 @@ def load(request):
         
     return render_to_response('load.html', RequestContext(request, locals()))
 
+def registrar(request):
+    lista = []
+    if request.method == 'POST':
+        form = PersonaForm(request.POST)
+        if form.is_valid():            
+            p = Persona()
+            p.nombre = form.cleaned_data['nombre']
+            p.apellido = form.cleaned_data['apellido']
+            p.sexo = form.cleaned_data['sexo']
+            p.email = form.cleaned_data['email']
+            p.telefono = form.cleaned_data['telefono']
+            p.organizacion = form.cleaned_data['organizacion']
+            p.save()
+            for pro in form.cleaned_data['profesion']:
+                p.profesion.add(pro)            
+            lista.append(p.id)
+            lista.append('%s %s' % (p.nombre, p.apellido))
+            return HttpResponse(simplejson.dumps(lista), mimetype='application/json')
+    else:
+        form = PersonaForm()
+    return render_to_response('registrar.html', RequestContext(request, locals()))
+
 # Vistas para funciones de busqueda
 def buscar_solicitud(request):
     flag = 'solicitud'
@@ -345,6 +367,29 @@ def get_materiales(request):
     return HttpResponse(iter_results(materiales), mimetype='text/plain')
 
 autocomplete = cache_page(get_materiales, 60 * 60)
+
+def get_orgs(request):
+    def iter_results(results):
+        if results:
+            for r in results:
+                yield '%s\n' % (r.nombre)
+
+    if not request.GET.get('q'):
+        return HttpResponse(mimetype='text/plain')
+
+    query = request.GET.get('q')
+    limit = request.GET.get('limit', 15)
+    try:
+        limit = int(limit)
+    except ValueError:
+        return HttpResponseBadRequest()
+
+    orgs = Organizacion.objects.filter(nombre__icontains=query).distinct()[:limit]
+    #lista = [(p.id, p.nombre, p.apellido) for p in personas]
+
+    return HttpResponse(iter_results(orgs), mimetype='text/plain')
+
+autocomplete = cache_page(get_orgs, 60 * 60)
 
 def get_profesiones(request):
     profesiones = Profesion.objects.all().order_by('id')
