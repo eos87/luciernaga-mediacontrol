@@ -6,6 +6,7 @@
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
         <script type="text/javascript" src="/files/js/jquery.autocomplete.min.js"></script>
         <link type="text/css" rel="stylesheet"  href="/files/css/site.css" >
+        <link type="text/css" rel="stylesheet" href="/files/css/jquery.autocomplete.css">
         <style type="text/css">
             body{
                 background: none;
@@ -23,6 +24,7 @@
                 });
             });*/
             $(document).ready(function(){
+                $('#id_org').autocomplete('/ajax/org2/');
                 $('#registrar').submit(function(){
                     var datos = $('#registrar').serialize();
                     $.post('/load/registrar/', datos,

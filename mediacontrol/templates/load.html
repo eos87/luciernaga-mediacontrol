@@ -60,7 +60,7 @@
                             <td id="{{persona.id}}_nombre">{{persona.nombre}} {{persona.apellido}}&nbsp;</td>
                             <td>{{persona.email}}&nbsp;</td>
                             <td>{{persona.telefono}}&nbsp;</td>
-                            <td>{{persona.organizacion}}&nbsp;</td>
+                            <td>{{persona.org2}}&nbsp;</td>
                             <td>
                                 {% for pro in persona.profesion.all %}
                                 {{pro.nombre}}{% if forloop.last %}{% else %},<br>{% endif %}

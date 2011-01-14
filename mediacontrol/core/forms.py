@@ -20,10 +20,12 @@ class MaterialForm(forms.ModelForm):
         #widgets = {'tematica': forms.CheckboxSelectMultiple}
 
 class PersonaForm(forms.ModelForm):
+    org = forms.CharField(max_length=150, label='Organizacion')
     profesion = forms.ModelMultipleChoiceField(queryset=Profesion.objects.all(), widget=forms.CheckboxSelectMultiple, help_text="")
-    org2 = forms.CharField(max_length=150, label='Organizacion2')
     class Meta:
         model = Persona
+        exclude = ['org2']
+        fields = ['nombre', 'apellido', 'sexo', 'email', 'telefono', 'org', 'profesion']
         
 class ProfesionForm(forms.ModelForm):
     class Meta:

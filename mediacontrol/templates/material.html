@@ -30,11 +30,9 @@
             <thead>
                 <tr>
                     <th>C&oacute;digo</th>
-                    <th>T&iacute;tulo</th>
-                    <th>Autor</th>
+                    <th>T&iacute;tulo</th>                    
                     <th>Tipo</th>
-                    <th>Tem&aacute;tica</th>
-                    <th>Cant</th>
+                    <th>Tem&aacute;tica</th>                    
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -43,20 +41,16 @@
                 {% for material in materiales %}
                 <tr>
                     <td>{{material.codigo|upper}}&nbsp;</td>
-                    <td>{{material.titulo}}&nbsp;</td>
-                    <td>{{material.autor}}&nbsp;</td>
+                    <td>{{material.titulo}}&nbsp;</td>                    
                     <td>{{material.tipo}}&nbsp;</td>
                     <td>
                         {% for tema in material.tematica.all %}
                         {{tema.nombre}}{% if forloop.last %}{% else %},<br>{% endif %}
                         {% endfor %}
                         &nbsp;
-                    </td>
+                    </td>                    
                     <td>
-                        {{material.cantidad}}&nbsp;
-                    </td>
-                    <td>
-                        <a href="/edit/material/{{material.id}}/" style="color: #069;"><img src="/files/images/editar2.png">Editar</a> <br> <a href="javascript:Borrar_material('{{material.id}}');" style="color: #069;"><img src="/files/images/borrar.png" alt="borrar">Borrar</a>
+                        <a href="/edit/material/{{material.id}}/" style="color: #069;"><img src="/files/images/editar2.png">Editar</a> | <a href="javascript:Borrar_material('{{material.id}}');" style="color: #069;"><img src="/files/images/borrar.png" alt="borrar">Borrar</a>
                     </td>
                 </tr>
                 {% endfor %}

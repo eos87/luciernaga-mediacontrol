@@ -39,33 +39,29 @@
         <div>
             <img src="http://mcontrol.fundacionluciernaga.org/files/images/logo.jpg" alt="">
             <div class="datos"><br><br>
-                <span style="font-size: 14px;">Materiales disponibles {{mes}} {{anio}}</span><br><br>
+                <span style="font-size: 14px;">Materiales registrados {{mes}} {{anio}}</span><br><br>
             </div>
             <br><br>
             <table class="mostrar">
                 <thead>
                     <tr>
                         <th>C&oacute;digo</th>
-                        <th>T&iacute;tulo</th>
-                        <th>Autor</th>
+                        <th>T&iacute;tulo</th>                        
                         <th>Tipo</th>
-                        <th>Tem&aacute;tica</th>
-                        <th>Cant. disp.</th>
+                        <th>Tem&aacute;tica</th>                        
                     </tr>
                 </thead>
                 <tbody>
                     {% for material in materiales %}
                     <tr>
                         <td>{{material.codigo}}</td>
-                        <td>{{material.titulo}}</td>
-                        <td>{{material.autor}}</td>
+                        <td>{{material.titulo}}</td>                        
                         <td>{{material.tipo}}</td>
                         <td class="materiales">
                             {% for i in material.tematica.all %}
                             {{i.nombre}}{% if forloop.last %}{% else %}, {% endif %}
                             {% endfor %}
-                        </td>
-                        <td>{{material.cantidad}}</td>
+                        </td>                        
                     </tr>
                     {% endfor %}
                 </tbody>
