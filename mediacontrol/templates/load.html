@@ -15,7 +15,7 @@
             $(document).ready(function(){
                 $('.agregar').click(function(){
                     var id = $(this).attr('id');
-                    var nombre = $('#'+id+'_nombre').html();
+                    var nombre = $('#'+id+'_nombre').text();
                     $('#id_persona', window.parent.document).val(nombre);
                     $('#id_userid', window.parent.document).val(id);
                     window.parent.$.modal.close(true);
@@ -42,6 +42,7 @@
         </div>
         <center>
             <div>
+                {% if personas %}
                 <table class="mostrar">
                     <thead>
                         <tr>
@@ -56,10 +57,10 @@
                     <tbody style="overflow: auto; height: 280px; overflow-x: hidden;">
                         {% for persona in personas %}
                         <tr>
-                            <td id="{{persona.id}}_nombre">{{persona.nombre}} {{persona.apellido}}</td>
-                            <td>{{persona.email}}</td>
-                            <td>{{persona.telefono}}</td>
-                            <td>{{persona.organizacion}}</td>
+                            <td id="{{persona.id}}_nombre">{{persona.nombre}} {{persona.apellido}}&nbsp;</td>
+                            <td>{{persona.email}}&nbsp;</td>
+                            <td>{{persona.telefono}}&nbsp;</td>
+                            <td>{{persona.org2}}&nbsp;</td>
                             <td>
                                 {% for pro in persona.profesion.all %}
                                 {{pro.nombre}}{% if forloop.last %}{% else %},<br>{% endif %}
@@ -75,6 +76,10 @@
                         {% endfor %}
                     </tbody>
                 </table>
+                {% else %}
+                No hay resultados! <br>
+                Click para registrar a <a href="/load/registrar/">{{query}}</a>
+                {% endif %}
             </div>
         </center>        
     </body>

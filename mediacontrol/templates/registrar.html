@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+        <script type="text/javascript" src="/files/js/jquery.autocomplete.min.js"></script>
+        <link type="text/css" rel="stylesheet"  href="/files/css/site.css" >
+        <link type="text/css" rel="stylesheet" href="/files/css/jquery.autocomplete.css">
+        <style type="text/css">
+            body{
+                background: none;
+            }
+        </style>
+        <script>
+            /*$(document).ready(function(){
+                $('.agregar').click(function(){
+                    var id = $(this).attr('id');
+                    var nombre = $('#'+id+'_nombre').html();
+                    $('#id_persona', window.parent.document).val(nombre);
+                    $('#id_userid', window.parent.document).val(id);
+                    window.parent.$.modal.close(true);
+                    return false;
+                });
+            });*/
+            $(document).ready(function(){
+                $('#id_org').autocomplete('/ajax/org2/');
+                $('#registrar').submit(function(){
+                    var datos = $('#registrar').serialize();
+                    $.post('/load/registrar/', datos,
+                    function(data){
+                        $('#id_persona', window.parent.document).val(data[1]);
+                        $('#id_userid', window.parent.document).val(data[0]);
+                        window.parent.$.modal.close(true);                        
+                    }, "json");
+                    return false;
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <img style="float: right; margin-right: 40px;" src="/files/images/persona.png" alt="Solicitantes">
+        <div style="margin-left: 80px; margin-top: 30px;">
+            <span style="color: #069;">Agregar solicitante</span><br><br>
+            <form style="margin:0;" action="." method="POST" id="registrar">{% csrf_token %}
+                <table>
+                    {{form.as_table}}
+                    <tr><td><input type="submit" value="Guardar" /></td></tr>
+                </table>
+            </form>
+        </div>
+    </body>
+</html>

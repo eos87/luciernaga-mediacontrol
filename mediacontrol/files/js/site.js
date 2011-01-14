@@ -18,22 +18,23 @@ $(document).ready(function(){
     $('#id_persona').click(function(){
         openWindow('load');
     });
+    $('#id_org').autocomplete('/ajax/org2/');
     $('#id_material').autocomplete('/ajax/personas/').result(function(evt, data, formatted){
         var url = $.cookie('url');
-        var id = data[5];
-        var cant = data[6];
+        var id = data[4];
+        //var cant = data[6];
         //$('#osx-modal-title').html('Cantidad | ' + data[2] + ' | Máx.'+ data[6]);
         //$('#osx-modal-data').InitOSX(); sustituido por javascript prompt
         if(url.search(id+':')!=-1){
             alert('Ya has agregado ese material');
             $('#id_material').val('');
         }else{
-            var cant2 = getCant(cant);
+            var cant2 = getCant();
             if (cant2 != null){
                 var lista = '<tr><td><a href="" onclick="$(this).parent().parent().remove(); Remove('+data[5]+','+cant2+'); return false;"><img src="/files/images/borrar.png" alt="borrar">Borrar</a></td>';
-                lista += '<td>'+data[1]+'</td><td>'+data[2]+'</td><td>'+data[3]+'</td><td>'+data[4]+'</td><td>'+cant2+' </td></tr>';
+                lista += '<td>'+data[1]+'</td><td>'+data[2]+'</td><td>'+data[3]+'</td><td>'+cant2+' </td></tr>';
                 $('.mostrar tbody').append(lista);
-                $('#id_material').val('');
+                $('#id_material').val('');                
                 add2URL(id, cant2);
             }
         }
@@ -71,16 +72,13 @@ $(document).ready(function(){
     });
 });
 
-function getCant(cant){
-    var cant2 = prompt('Introduzca una cantidad. Máx '+cant,'');
+function getCant(){
+    var cant2 = prompt('Introduzca una cantidad.');
     if (cant2 == null){
         
     }else if(cant2 == ''){
         alert('Debes ingresar una cantidad');
-        return getCant(cant);
-    }else if(parseInt(cant2) > parseInt(cant)){
-        alert('Limite excedido');
-        return getCant(cant);
+        return getCant();
     }else{
         return cant2;
     }
@@ -110,6 +108,24 @@ function Remove(id, cant2){
         url = url.replace(id+':'+cant2, '');
     }
     $.cookie('url', url);
+}
+
+function getTime(){
+    var date = new Date();
+    var hours = date.getHours();
+    if(parseInt(hours)<10){
+        hours = '0'+hours;
+    }
+    var mins = date.getMinutes();
+    if(parseInt(mins)<10){
+        mins = '0'+mins;
+    }
+    var secs = date.getSeconds();
+    if(parseInt(secs)<10){
+        secs = '0'+secs;
+    }
+    var fecha = hours+':'+mins+':'+secs;
+    return fecha;
 }
 
 function getDateTime(){

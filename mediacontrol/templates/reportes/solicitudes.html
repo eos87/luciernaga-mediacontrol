@@ -61,7 +61,7 @@
                         <td>{{solicitud.persona}}</td>
                         <td class="materiales">
                             {% for i in solicitud.agregado_set.all %}
-                            {{i.material.titulo}},
+                            {{i.material.titulo}}{% if forloop.last %}{% else %}, {% endif %}
                             {% endfor %}
                         </td>
                     </tr>
@@ -69,7 +69,7 @@
                 </tbody>
             </table>
         </div>
-        <div id="footerContent">
+        <div id="footerContent">            
             {%block page_foot%}
             P&aacute;gina <pdf:pagenumber>
                 {%endblock%}

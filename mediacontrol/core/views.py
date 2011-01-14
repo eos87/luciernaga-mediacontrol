@@ -1,18 +1,18 @@
 # -*- coding: UTF-8 -*-
 import datetime
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.db.models import Sum
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
-from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from django.utils import simplejson
 from django.views.decorators.cache import cache_page
 from forms import *
+from mediacontrol.settings import *
 from models import *
 from utils import *
-from mediacontrol.settings import *
 
 @login_required
 def index(request):
@@ -43,7 +43,7 @@ def add_solicitud(request):
             agregado.cantidad = int(elem.split(':')[1])
             agregado.save()
             #restando la cantidad de material en inventario
-            m.cantidad = m.cantidad - int(elem.split(':')[1])
+            #m.cantidad = m.cantidad - int(elem.split(':')[1])
             m.save()
         if r:
             lista = '/reporte/' + str(s.pk)
@@ -59,7 +59,7 @@ def reportar(request, id):
     return render_to_pdf('reportes/solicitud.html', {'s': s, })
 
 def material_report(request):
-    materiales = Material.objects.filter(cantidad__gt=0)
+    materiales = Material.objects.all()
     anio = datetime.date.today().year
     mes = dicc[int(datetime.date.today().month)]
     return render_to_pdf('reportes/materiales.html', {'materiales': materiales, 'mes':mes, 'anio':anio})
@@ -105,7 +105,7 @@ def graficos(request):
             if var == 'sexo':                                
                 masculino = Agregado.objects.filter(solicitud__in=query, solicitud__persona__sexo='masculino')
                 femenino = Agregado.objects.filter(solicitud__in=query, solicitud__persona__sexo='femenino')
-                for key,value in dicc.items():
+                for key, value in dicc.items():
                     valor = masculino.filter(solicitud__fecha__month=key).aggregate(month_sum=Sum('cantidad'))['month_sum']
                     if valor != None:
                         masculino_salida[key] = valor
@@ -130,7 +130,23 @@ def add_persona(request):
     if request.method == 'POST':
         form = PersonaForm(request.POST)
         if form.is_valid():
-            form.save()
+            try:
+                org = Organizacion.objects.get(nombre=request.POST['org'])
+            except:
+                org = Organizacion()
+                org.nombre = request.POST['org']
+                org.save()
+            print 'reputa madre'
+            p = Persona()
+            p.nombre = form.cleaned_data['nombre']
+            p.apellido = form.cleaned_data['apellido']
+            p.sexo = form.cleaned_data['sexo']
+            p.email = form.cleaned_data['email']
+            p.telefono = form.cleaned_data['telefono']
+            p.org2 = org
+            p.save()
+            for pro in form.cleaned_data['profesion']:
+                p.profesion.add(pro)
             return HttpResponseRedirect('/add/persona/#registrados')
     else:
         form = PersonaForm()
@@ -145,7 +161,22 @@ def edit_persona(request, id):
     if request.method == 'POST':
         form = PersonaForm(request.POST, instance=edit)
         if form.is_valid():
-            form.save()
+            try:
+                org = Organizacion.objects.get(nombre=request.POST['org'])
+            except:
+                org = Organizacion()
+                org.nombre = request.POST['org']
+                org.save()
+            print 'reputa madre'            
+            edit.nombre = form.cleaned_data['nombre']
+            edit.apellido = form.cleaned_data['apellido']
+            edit.sexo = form.cleaned_data['sexo']
+            edit.email = form.cleaned_data['email']
+            edit.telefono = form.cleaned_data['telefono']
+            edit.org2 = org
+            edit.save()
+            for pro in form.cleaned_data['profesion']:
+                edit.profesion.add(pro)
             return HttpResponseRedirect('/add/persona/#registrados')
     else:
         form = PersonaForm(instance=edit)
@@ -298,6 +329,35 @@ def load(request):
         
     return render_to_response('load.html', RequestContext(request, locals()))
 
+def registrar(request):
+    lista = []
+    if request.method == 'POST':
+        form = PersonaForm(request.POST)
+        if form.is_valid():            
+            try:
+                org = Organizacion.objects.get(nombre=request.POST['org'])
+            except:
+                org = Organizacion()
+                org.nombre = request.POST['org']
+                org.save()
+            print 'reputa madre'
+            p = Persona()
+            p.nombre = form.cleaned_data['nombre']
+            p.apellido = form.cleaned_data['apellido']
+            p.sexo = form.cleaned_data['sexo']
+            p.email = form.cleaned_data['email']
+            p.telefono = form.cleaned_data['telefono']
+            p.org2 = org
+            p.save()
+            for pro in form.cleaned_data['profesion']:
+                p.profesion.add(pro)
+            lista.append(p.id)
+            lista.append('%s %s' % (p.nombre, p.apellido))
+            return HttpResponse(simplejson.dumps(lista), mimetype='application/json')
+    else:
+        form = PersonaForm()
+    return render_to_response('registrar.html', RequestContext(request, locals()))
+
 # Vistas para funciones de busqueda
 def buscar_solicitud(request):
     flag = 'solicitud'
@@ -322,7 +382,7 @@ def get_materiales(request):
     def iter_results(results):
         if results:
             for r in results:
-                yield '%s-%s|%s|%s|%s|%s|%s|%s\n' % (r.codigo, r.titulo, r.codigo, r.titulo, r.autor, r.tipo, r.id, r.cantidad)
+                yield '%s-%s|%s|%s|%s|%s\n' % (r.codigo, r.titulo, r.codigo, r.titulo, r.tipo, r.id)
 
     if not request.GET.get('q'):
         return HttpResponse(mimetype='text/plain')
@@ -334,9 +394,7 @@ def get_materiales(request):
     except ValueError:
         return HttpResponseBadRequest()
 
-    qset = (
-            Q(cantidad__gt=0) &
-            Q(titulo__icontains=query) |
+    qset = (Q(titulo__icontains=query) |
             Q(codigo__icontains=query)
             )
     materiales = Material.objects.filter(qset).distinct()[:limit]
@@ -345,6 +403,29 @@ def get_materiales(request):
     return HttpResponse(iter_results(materiales), mimetype='text/plain')
 
 autocomplete = cache_page(get_materiales, 60 * 60)
+
+def get_orgs(request):
+    def iter_results(results):
+        if results:
+            for r in results:
+                yield '%s\n' % (r.nombre)
+
+    if not request.GET.get('q'):
+        return HttpResponse(mimetype='text/plain')
+
+    query = request.GET.get('q')
+    limit = request.GET.get('limit', 15)
+    try:
+        limit = int(limit)
+    except ValueError:
+        return HttpResponseBadRequest()
+
+    orgs = Organizacion.objects.filter(nombre__icontains=query).distinct()[:limit]
+    #lista = [(p.id, p.nombre, p.apellido) for p in personas]
+
+    return HttpResponse(iter_results(orgs), mimetype='text/plain')
+
+autocomplete = cache_page(get_orgs, 60 * 60)
 
 def get_profesiones(request):
     profesiones = Profesion.objects.all().order_by('id')
